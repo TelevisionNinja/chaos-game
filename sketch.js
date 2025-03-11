@@ -5,12 +5,18 @@ let seeds = [];
 let previousPoints = [];
 const previousLimit = 1;
 let previousIndex = 0;
+let previousSeed = null;
+let avoidSameSeed = false;
 
 function setup() {
     width = windowWidth - 16;
     height = windowHeight - 64;
     const canvas = createCanvas(width, height);
     canvas.mouseClicked(addSeed);
+
+    const sliderValue = document.getElementById("sliderValue");
+    sliderValue.innerHTML = document.getElementById("rSlider").value;
+    rSlider.oninput = () => { sliderValue.innerHTML = document.getElementById("rSlider").value; };
 
     background(32, 32, 32);
 
@@ -33,17 +39,20 @@ function draw() {
 
         for (let i = 0; i < 1000; i++) { // draw 1000 points at a time
             const randomSeed = seeds[randomMath(seeds.length)];
-            const newPreviousPoint = vectorLinearInterpolation(previousPoints[previousIndex], randomSeed, percentage);
-            previousIndex = (previousIndex + 1) % previousLimit;
+            if (!avoidSameSeed || previousSeed !== randomSeed) {
+                const newPreviousPoint = vectorLinearInterpolation(previousPoints[previousIndex], randomSeed, percentage);
+                previousIndex = (previousIndex + 1) % previousLimit;
 
-            if (previousPoints.length < previousLimit) {
-                previousPoints.push(newPreviousPoint);
-            }
-            else {
-                previousPoints[previousIndex] = newPreviousPoint;
-            }
+                if (previousPoints.length < previousLimit) {
+                    previousPoints.push(newPreviousPoint);
+                }
+                else {
+                    previousPoints[previousIndex] = newPreviousPoint;
+                }
 
-            point(newPreviousPoint[0], newPreviousPoint[1]);
+                point(newPreviousPoint[0], newPreviousPoint[1]);
+                previousSeed = randomSeed;
+            }
         }
     }
     else {
@@ -94,4 +103,15 @@ function linearInterpolation(x1, x2, percentage) {
 
 function vectorLinearInterpolation(vec1, vec2, percentage) {
     return [linearInterpolation(vec1[0], vec2[0], percentage), linearInterpolation(vec1[1], vec2[1], percentage)];
+}
+
+function toggleAvoid() {
+    avoidSameSeed = !avoidSameSeed;
+
+    if (avoidSameSeed) {
+        document.getElementById("avoidSameSeedButton").value = "Avoid Same Seed";
+    }
+    else {
+        document.getElementById("avoidSameSeedButton").value = "Allow Same Seed";
+    }
 }

@@ -5,9 +5,12 @@
     </head>
     <body>
         <main>
-            r:
-            <input id="rSlider" name="rSlider" type="range" max="1" min="0" title="r" step="0.01" value="0.5"></input>
+            <div>
+                <input id="rSlider" name="rSlider" type="range" max="1" min="0" title="r" step="0.001" value="0.5"></input>
+                r: <span id="sliderValue"></span>
+            </div>
             <input id="startButton" name="startButton" type="button" value="Start" onclick="startDrawing()"></button>
+            <input id="avoidSameSeedButton" name="avoidSameSeedButton" type="button" value="Allow Same Seed" onclick="toggleAvoid()"></button>
         </main>
     </body>
 </html>
