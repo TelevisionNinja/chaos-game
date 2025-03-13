@@ -74,6 +74,13 @@ function addSeed() {
 
 function startDrawing() {
     isDrawing = !isDrawing;
+
+    if (isDrawing) {
+        document.getElementById("startButton").value = "Stop";
+    }
+    else {
+        document.getElementById("startButton").value = "Start";
+    }
 }
 
 /**
